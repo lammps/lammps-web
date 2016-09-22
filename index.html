@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+<head>
+<title>LAMMPS Online</title>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="codemirror/lib/codemirror.css">
+<link rel="stylesheet" href="codemirror/theme/monokai.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script src="js/jquery.min.js"></script>
+<script src="js/lammps.js"> </script>
+<script src="js/Detector.js"> </script>
+<script src="js/three.min.js"> </script>
+<script src="js/OrbitControls.js"> </script>
+<script src="js/md.js"> </script>
+
+<script src="codemirror/lib/codemirror.js"></script>
+<script src="codemirror/mode/lammps/pair_styles.js"></script>
+<script src="codemirror/mode/lammps/fix_styles.js"></script>
+<script src="codemirror/mode/lammps/compute_styles.js"></script>
+<script src="codemirror/mode/lammps/dump_styles.js"></script>
+<script src="codemirror/mode/lammps/lammps.js"></script>
+<script src="codemirror/addon/selection/active-line.js"></script>
+<script src="codemirror/addon/edit/matchbrackets.js"></script>
+<script type="x-shader/x-vertex" id="vertexShader">
+// BEGIN spheres.vsh
+attribute float vertexId;
+attribute float radius;
+varying vec3 modelSpherePosition;
+varying vec3 modelPosition;
+varying float radius_vs;
+vec3 makePerpendicular(vec3 v) {
+    if(v.x == 0.0 && v.y == 0.0) {
+        if(v.z == 0.0) {
+            return vec3(0.0, 0.0, 0.0);
+        }
+        return vec3(0.0, 1.0, 0.0);
+    }
+    return vec3(-v.y, v.x, 0.0);
+}
+
+void main() {
+	// TODO should find needed size or move closer to camera. NOTE: 0.6 is a hack, should be 0.5
+    // Another factor of 2 since the scale is somehow the diameter?
+    vec3 vPosition = position;
+    modelSpherePosition = (modelMatrix * vec4(position, 1.0)).xyz;
+
+    vec3 view = normalize(position - cameraPosition);
+    vec3 right = normalize(makePerpendicular(view));
+    vec3 up = cross(right, view);
+
+    vPosition += 2.0*0.6*(-up - right)*(radius*float(vertexId==0.0));
+    vPosition += 2.0*0.6*(-up + right)*(radius*float(vertexId==1.0));
+    vPosition += 2.0*0.6*(up - right)*(radius*float(vertexId==2.0));
+    vPosition += 2.0*0.6*(up + right)*(radius*float(vertexId==3.0));
+    vec4 modelPositionTmp = modelMatrix * vec4(vPosition, 1.0);
+    modelPosition = modelPositionTmp.xyz;
+    radius_vs = radius;
+    gl_Position = projectionMatrix*modelViewMatrix*vec4(vPosition, 1.0);
+}
+// END spheres.vsh
+</script>
+<script type="x-shader/x-fragment" id="fragmentShader">// BEGIN spheres.fsh
+precision highp float;
+varying vec3 modelSpherePosition;
+varying vec3 modelPosition;
+varying float radius_vs;
+
+void main(void) {
+    vec3 rayDirection = cameraPosition - modelPosition;
+    vec3 rayOrigin = modelPosition - modelSpherePosition;
+
+    vec3 E = rayOrigin;
+    vec3 D = rayDirection;
+
+    // Sphere equation
+    //      x^2 + y^2 + z^2 = r^2
+    // Ray equation is
+    //     P(t) = E + t*D
+    // We substitute ray into sphere equation to get
+    //     (Ex + Dx * t)^2 + (Ey + Dy * t)^2 + (Ez + Dz * t)^2 = r^2
+    float r2 = radius_vs*radius_vs;
+    float a = D.x*D.x + D.y*D.y + D.z*D.z;
+    float b = 2.0*E.x*D.x + 2.0*E.y*D.y + 2.0*E.z*D.z;
+    float c = E.x*E.x + E.y*E.y + E.z*E.z - r2;
+
+    // discriminant of sphere equation
+    float d = b*b - 4.0*a*c;
+    if(d < 0.0) {
+    	discard;
+    }
+
+    float t = (-b + sqrt(d))/(2.0*a);
+    vec3 sphereIntersection = rayOrigin + t * rayDirection;
+    vec3 color = vec3(0.9, 0.8, 0.4);
+    vec3 normal = normalize(sphereIntersection);
+    vec3 normalDotCamera = color*dot(normal, normalize(rayDirection));
+    
+    float pi = 3.1415926535897932384626433832795;
+
+    vec3 position = modelSpherePosition + sphereIntersection;
+    gl_FragColor = vec4(normalDotCamera, 1.0);
+}
+</script>
+</head>
+<body>
+	<div id="webglwindow" class="overlay"></div>
+	<div id="editor">
+	<form><textarea id="code" name="code">
+# 3d Lennard-Jones melt
+
+variable	xx equal 10
+variable	yy equal 10
+variable	zz equal 10
+
+units		lj
+atom_style	atomic
+
+lattice		fcc 0.8442
+region		box block 0 ${xx} 0 ${yy} 0 ${zz}
+create_box	1 box
+create_atoms	1 box
+mass		1 1.0
+
+velocity	all create 1.44 87287 loop geom
+
+pair_style	lj/cut 2.5
+pair_coeff	1 1 1.0 1.0 2.5
+
+neighbor	0.3 bin
+neigh_modify	delay 0 every 20 check no
+
+fix		1 all nve
+
+run		100
+</textarea></form></div>
+<div id="toolbar"></div>
+<script src="js/Main.js"></script>
+</body>
+</html>
