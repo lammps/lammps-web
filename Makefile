@@ -18,7 +18,7 @@ lammps.html: $(LAMMPS_OBJ_FILES)
 
 web/js/lammps.js: $(LAMMPS_OBJ_FILES)
 	$(CXX) $(SYMBOLS) $(LD_FLAGS) -o $@ $^
-	mv web/js/lammps.js.mem web/lammps.js.mem
+	-mv web/js/lammps.js.mem web/lammps.js.mem
 
 web/js/lammpswasm.js: $(LAMMPS_OBJ_FILES)
 	$(CXX) -s WASM=1 $(SYMBOLS) $(LD_FLAGS) -o $@ $^
