@@ -19,11 +19,11 @@ RUN cd /home/jenkins/emsdk-portable && \
     ./emsdk install latest && \
     ./emsdk activate latest
 
-ENV PATH /home/jenkins/emsdk-portable:/home/jenkins/emsdk-portable/clang/e1.37.21_64bit:/home/jenkins/emsdk-portable/node/4.1.1_64bit/bin:/home/jenkins/emsdk-portable/emscripten/1.37.21:$PATH
+ENV PATH /home/jenkins/emsdk-portable:/home/jenkins/emsdk-portable/clang/e1.38.11_64bit:/home/jenkins/emsdk-portable/node/8.9.1_64bit/bin:/home/jenkins/emsdk-portable/emscripten/1.38.11:$PATH
 ENV EMSDK /home/jenkins/emsdk-portable
-ENV BINARYEN_ROOT /home/jenkins/emsdk-portable/clang/e1.37.21_64bit/binaryen
+ENV BINARYEN_ROOT /home/jenkins/emsdk-portable/clang/e1.38.11_64bit/binaryen
 
-ENV EMSCRIPTEN /home/jenkins/emsdk-portable/emscripten/1.37.21
+ENV EMSCRIPTEN /home/jenkins/emsdk-portable/emscripten/1.38.11
 
 
 RUN emsdk activate
