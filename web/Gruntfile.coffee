@@ -38,7 +38,7 @@ module.exports = (grunt) ->
 
     exec:
       bower:
-        cmd: 'bower install'
+        cmd: 'bower --allow-root install'
 
     copy:
       webapp:
@@ -49,22 +49,12 @@ module.exports = (grunt) ->
         },
         {
           expand: true
-          src: "lammps.js.mem"
+          src: "lmp.js"
           dest: "_site/"
         },
         {
           expand: true
-          src: "lammpswasm.wasm"
-          dest: "_site/"
-        },
-        {
-          expand: true
-          src: "lammpswasm.asm.js"
-          dest: "_site/"
-        },
-        {
-          expand: true
-          src: "lammpswasm.js.mem"
+          src: "lmp.wasm"
           dest: "_site/"
         },
         {

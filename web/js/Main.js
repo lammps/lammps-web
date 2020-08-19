@@ -86,8 +86,8 @@ document.addEventListener( 'keydown', function ( event ) {
 	}
 }, false );
 
-Module['_main'] = function() {
-	var callbackPointer = Runtime.addFunction(synchronizeLAMMPS)
+Module["onRuntimeInitialized"] = function() {
+	var callbackPointer = addFunction(synchronizeLAMMPS, 'v')
 	Atomify.setCallback(callbackPointer)
 	
 	buttonUpdate.disabled = false

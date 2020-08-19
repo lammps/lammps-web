@@ -2,32 +2,17 @@ FROM ubuntu:latest
 
 MAINTAINER Richard Berger <richard.berger@outlook.com>
 
-RUN apt update && apt install -y wget build-essential cmake git python
+RUN apt update && apt install -y wget build-essential cmake git python3
 
-
-RUN groupadd -g 114 jenkins
-RUN useradd -u 106 -g 114 -ms /bin/bash jenkins
-RUN mkdir -p /app
-
-USER jenkins
-
-RUN wget -qO /tmp/emsdk-portable.tar.gz https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-portable.tar.gz && \
-    tar xvzf /tmp/emsdk-portable.tar.gz -C /home/jenkins && rm /tmp/emsdk-portable.tar.gz
-
-RUN cd /home/jenkins/emsdk-portable && \
-    ./emsdk update && \
+RUN cd /opt && git clone https://github.com/emscripten-core/emsdk.git && \
+    cd /opt/emsdk && \
     ./emsdk install latest && \
     ./emsdk activate latest
 
-ENV PATH /home/jenkins/emsdk-portable:/home/jenkins/emsdk-portable/clang/e1.38.11_64bit:/home/jenkins/emsdk-portable/node/8.9.1_64bit/bin:/home/jenkins/emsdk-portable/emscripten/1.38.11:$PATH
-ENV EMSDK /home/jenkins/emsdk-portable
-ENV BINARYEN_ROOT /home/jenkins/emsdk-portable/clang/e1.38.11_64bit/binaryen
+RUN apt install -y npm
 
-ENV EMSCRIPTEN /home/jenkins/emsdk-portable/emscripten/1.38.11
+RUN npm install -g bower
 
+RUN mkdir -p /workdir
 
-RUN emsdk activate
-
-ENV EM_CONFIG=/home/jenkins/.emscripten
-
-CMD /bin/bash
+WORKDIR /workdir
