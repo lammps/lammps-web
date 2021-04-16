@@ -33,7 +33,7 @@ using namespace FixConst;
 FixAtomify::FixAtomify(LAMMPS *lmp, int narg, char **arg) :
   Fix(lmp, narg, arg)
 {
-  callback = NULL;
+  callback = nullptr;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -58,23 +58,9 @@ void FixAtomify::init()
     error->all(FLERR,"Fix atomify callback function not set");
 }
 
-/* ---------------------------------------------------------------------- */
-
-void FixAtomify::update_computes()
-{
-  for(int i=0; i<modify->ncompute; i++) {
-    Compute *compute = modify->compute[i];
-    if(compute->peatomflag || compute->peflag || compute->pressatomflag || compute->pressflag) {
-      // Taken out for now. This gives poor performance and we should only do it if we need it.
-      // compute->addstep(update->ntimestep+1); 
-    }
-  }
-}
-
 void FixAtomify::end_of_step()
 {
     (this->callback)(ptr_caller,END_OF_STEP);
-    update_computes();
 }
 
 /* ---------------------------------------------------------------------- */
