@@ -1,76 +1,129 @@
 .CodeMirror {
-	border: 1px solid black; 
-	font-size:13px;
-	height: auto;
-	opacity: 0.85;
+    border: 1px solid black; 
+    font-size:13px;
+    height: 100%;
 }
 
-.editor {
-	opacity: 0.85;
+.container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
 }
 
-.overlay {
-	position: fixed;
-	width: 100%;
-	height: 100%;
-	left: 0;
-	top: 0;
-	/*background: rgba(0, 0, 0, 1.0);*/
-	background-color: #272822;
+#ide {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100%;
+    height: 50%;
 }
+
+#vseparator
+{
+  cursor: row-resize;
+  width: 100%;
+  height: 8px;
+  background-color: gray;
+}
+
+#editor {
+   display: block;
+   width: 50%; 
+   height: 100%;
+}
+
+#myconsole {
+    display: block;
+    font-family: monospace;
+    width: 50%;
+    height: 100%;
+    overflow-y: scroll;
+    background-color: white;
+    color: black;
+}
+
+.consoleoutput {
+    margin-left: 16px;
+    margin-right: 16px;
+    font-family: monospace;
+}
+
+#myconsoleoutput {
+    margin-top: 48px;
+    margin-left: 16px;
+    margin-right: 16px;
+    margin-bottom: 16px;
+}
+
+#inputline {
+    margin-bottom: 16px;
+    font-family: monospace;
+    outline: none;
+    border: none; 
+    width: 80%;
+}
+
+#webglwindow {
+    width: 100%;
+    height: 49%;
+    /*background: rgba(0, 0, 0, 1.0);*/
+    background-color: #272822;
+}
+
 
 html, body {
-	height: 100%;
-	background-color: #272822;
+    background-color: black;
+    height: 100%;
 }
 
 body {
-	margin: 0px;
-	overflow: hidden;
-	font-family: Arial;
+    margin: 0px;
+    overflow: hidden;
+    font-family: Arial;
 }
 
 a {
-	color: #ffffff;
+    color: #ffffff;
 }
 
 h1 {
-	font-size: 20px;
-	margin-top: 0px;
+    font-size: 20px;
+    margin-top: 0px;
 }
 
 .button {
-	font-size: 10px;
-	text-transform: uppercase;
-	text-decoration: none;
+    font-size: 10px;
+    text-transform: uppercase;
+    text-decoration: none;
 
-	color: rgb(80,80,80);
-	border: transparent;
-	background-color: rgb(235,235,235);
+    color: rgb(80,80,80);
+    border: transparent;
+    background-color: rgb(235,235,235);
 
-	margin: 2px;
-	padding: 8px 10px;
+    margin: 2px;
+    padding: 8px 10px;
 
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .button:hover {
-	color: rgb(235,235,235);
-	background-color: rgb(80,80,80);
+    color: rgb(235,235,235);
+    background-color: rgb(80,80,80);
 }
 
 .button path {
-	stroke: rgb(80,80,80);
+    stroke: rgb(80,80,80);
 }
 
 .button:hover path {
-	stroke: rgb(235,235,235);
+    stroke: rgb(235,235,235);
 }
 
 #toolbar {
-	position: absolute;
-	top: 15px;
-	right: 30px;
-	text-align: right;
-	z-index: 10; /* CodeMirror sets z-index */
+    position: absolute;
+    top: 15px;
+    right: 30px;
+    text-align: right;
+    z-index: 10; /* CodeMirror sets z-index */
 }

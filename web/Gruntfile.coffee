@@ -49,6 +49,11 @@ module.exports = (grunt) ->
         },
         {
           expand: true
+          src: "favicon.ico"
+          dest: "_site/"
+        },
+        {
+          expand: true
           src: "lmp.js"
           dest: "_site/"
         },

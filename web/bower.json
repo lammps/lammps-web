@@ -1,6 +1,6 @@
 {
   "name": "lammps-web",
-  "homepage": "https://github.com/andeplane/lammps-web",
+  "homepage": "https://github.com/lammps/lammps-web",
   "authors": [
     "Anders Hafreager",
     "Richard Berger"
