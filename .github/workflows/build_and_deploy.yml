@@ -1,0 +1,32 @@
+name: build_and_deploy
+
+on:
+  push:
+    branches:
+    - cmake
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: actions/checkout@v2
+      with:
+        repository: lammps/lammps
+        path: lammps
+        fetch-depth: 1
+
+    - name: Install packages
+      run: sudo apt-get install -y wget build-essential cmake git python3 npm
+
+    - name: Install Emscripten
+      run: |
+        cd /opt
+        git clone https://github.com/emscripten-core/emsdk.git
+        cd /opt/emsdk
+        ./emsdk install latest
+        ./emsdk activate latest
+
+    - name: Compile LAMMPS
+      run: ./build.sh
