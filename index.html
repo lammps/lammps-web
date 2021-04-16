@@ -13,6 +13,19 @@
 <script src="lib/js/show-hint.js"></script>
 <script src="lib/js/active-line.js"></script>
 <script src="lib/js/matchbrackets.js"></script>
+<script>
+
+function print_to_console(text) {
+  $("#myconsoleoutput").append(text);
+  $("#myconsole").scrollTop(function() { return this.scrollHeight; });
+}
+
+var Module = {
+    "print": function(text) { print_to_console(text + '<br/>') },
+    "printErr": function(text) { print_to_console(text + '<br />') }
+};
+
+</script>
 <script src="js/Detector.js"> </script>
 <script src="js/OrbitControls.js"> </script>
 <script src="js/lmp.js"> </script>
@@ -109,9 +122,11 @@ void main(void) {
 </script>
 </head>
 <body>
-	<div id="webglwindow" class="overlay"></div>
-	<div id="editor">
-	<form><textarea id="code" name="code">
+
+<div class="container">
+    <div id="ide">
+        <div id="editor">
+<textarea id="code">
 # 3d Lennard-Jones melt
 
 variable	xx equal 10
@@ -138,8 +153,23 @@ neigh_modify	delay 0 every 20 check no
 fix		1 all nve
 
 run		100
-</textarea></form></div>
+</textarea>
+        </div>
+
+        <div id="myconsole">
+            <div id="myconsoleoutput">
+            </div>
+            <div class="consoleoutput">&gt; <input id="inputline" /></div>
+        </div>
+    </div>
+
+    <div id="vseparator"></div>
+
+    <div id="webglwindow"></div>
+</div>
+
 <div id="toolbar"></div>
+
 <script src="js/Main.js"></script>
 </body>
 </html>
