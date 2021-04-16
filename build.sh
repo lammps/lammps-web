@@ -14,7 +14,7 @@ cd build
 
 emcmake cmake ../lammps/cmake
 emcmake cmake -C ../preset.cmake .
-emmake make -j
+emmake make -j 2
 
 cp lmp.js lmp.wasm ../web/js/
 
