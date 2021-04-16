@@ -41,3 +41,20 @@ You will need the [Emscripten](http://kripken.github.io/emscripten-site/) compil
 ```
 
 This will clone LAMMPS from [github.com/lammps/lammps](https://github.com/lammps/lammps), compile it and copy the new version of LAMMPS into the web directory. 
+
+## Build instructions with Docker
+
+```bash
+# build the container
+./build_container.sh
+
+# compile in container
+./build_in_container.sh
+```
+
+To view the generated site, you can use any simple webserver to host the `web/_site` folder.
+
+```
+cd web/_site
+python3 -m http.server
+```
