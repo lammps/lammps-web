@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-    - cmake
+    - master
 
 jobs:
   build_and_deploy:
