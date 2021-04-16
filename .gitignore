@@ -106,3 +106,8 @@ Temporary Items
 
 lammps
 web/js/lmp.*
+.npm
+build
+web/package-lock.json
+.config
+.bash_history

@@ -37,15 +37,15 @@ struct Box {
 
 FnPtr callback;
 Box box;
-LAMMPS *lammps = 0;
+LAMMPS *lammps = nullptr;
 
 extern "C" {
 void* reset() {
     if(lammps) {
         lammps_close((void*)lammps);
-        lammps = 0;
+        lammps = nullptr;
     }
-    lammps_open_no_mpi(0, 0, (void**)&lammps);
+    lammps = (LAMMPS*)lammps_open_no_mpi(0, 0, nullptr);
     return lammps;
 }
 
@@ -58,13 +58,12 @@ void addAtomifyFix()
 
     lammps_command(lammps, "fix atomify all atomify");
     
-    LAMMPS_NS::LAMMPS *lmp = static_cast<LAMMPS_NS::LAMMPS *>(lammps);
-    int ifix = lmp->modify->find_fix("atomify");
+    int ifix = lammps->modify->find_fix("atomify");
     if (ifix < 0) {
         printf("Error, could not create fix atomify");
         exit(1);
     }
-    LAMMPS_NS::FixAtomify *fix = static_cast<LAMMPS_NS::FixAtomify*>(lmp->modify->fix[ifix]);
+    FixAtomify *fix = static_cast<FixAtomify*>(lammps->modify->fix[ifix]);
     fix->set_callback(callback, nullptr);
 }
 
@@ -111,7 +110,7 @@ double *positions() {
     return x()[0];
 }
 
-void runCommands(char *commands) {
+void runCommands(const char *commands) {
     if(!lammps) {
         reset();
     }
@@ -120,7 +119,7 @@ void runCommands(char *commands) {
 }
 
 void runDefaultScript() {
-    char * defaultScript = 
+    const char * defaultScript = 
         "# 3d Lennard-Jones melt\n"
         "variable    x index 1\n"
         "variable    y index 1\n"
